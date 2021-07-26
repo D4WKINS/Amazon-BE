@@ -42,7 +42,11 @@ productRouter.post("/",async (req,res,next)=>{
     try{
         const newProduct = new ProductModel(req.body)
         const { _id } = await newProduct.save()
+        if(newProduct){
+            console.log("Product created successfully")
         res.status(201).send({ _id })
+       
+        }
     }
     catch(error){
         next(createError(500,"Error occured creating 'product'"))

@@ -22,9 +22,10 @@ const productSchema = new Schema({//create a schema
         type: String,
         required:true
     },
-    imageUrl:{
-        type:String, 
-        required:true
+    image:{
+        type: String,
+        required:true,
+        default: 'http://www.jennbennett.net/wp-content/uploads/2010/11/amazon-no-image.jpg'
     },
     price:{
         type:Number,
@@ -33,7 +34,11 @@ const productSchema = new Schema({//create a schema
     description:{
         type:String,
         required:true
-    }
+    },
+    reviews:{
+        type:Schema.Types.ObjectId,
+        ref:'Reviews'
+    },
 }, 
     {
         timestamps:true,// Automatically add createdAt and updatedAt fields

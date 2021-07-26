@@ -5,7 +5,7 @@ import productRoutes from './services/products/index.js'
 import {unauthorized,notFound,badRequest,serverError} from './errorHandlers.js'
 import cors from 'cors'
 
-const port = process.env.PORT || 3002
+const port = process.env.PORT || 3001
 const server = express()
 
 server.use(express.json())
