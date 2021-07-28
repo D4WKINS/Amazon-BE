@@ -1,4 +1,5 @@
 
+//When a user tries to access a non-existing route, this function is called
 export const unauthorized=(err,req,res,next)=>{
     if(err.status === 401){
         res.status(401).send(err.message || "Unauthorized")

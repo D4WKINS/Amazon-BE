@@ -1,7 +1,8 @@
 import express from 'express'
 import listEndpoints from 'express-list-endpoints'
 import mongoose from 'mongoose'
-import productRoutes from './services/products/index.js'
+import ProductRouter from './services/products/index.js'
+import UserRouter from './services/users/index.js'
 import {unauthorized,notFound,badRequest,serverError} from './errorHandlers.js'
 import cors from 'cors'
 
@@ -13,7 +14,8 @@ server.use(express.json())
 server.use(cors())//Allows Cross Origin Resource Sharing
 
 //----- ROUTES ---------------------
-server.use('/products',productRoutes)
+server.use('/products',ProductRouter)
+server.use('/users', UserRouter)
 
 //----- ERROR HANDLERS--------------
 server.use(unauthorized)

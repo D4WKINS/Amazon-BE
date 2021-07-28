@@ -2,13 +2,13 @@ import express from "express"
 import createError from "http-errors"
 import ProductModel from "./schema.js"
 
-const productRouter = express.Router();
+const ProductRouter = express.Router();
 
 
 //Retrive all products
 // GET /products
 
-productRouter.get("/", async(req,res,next)=>{
+ProductRouter.get("/", async(req,res,next)=>{
     try{
 
         const products = await ProductModel.find()
@@ -22,7 +22,7 @@ productRouter.get("/", async(req,res,next)=>{
 
 //Retrive a specific product
 // GET URL = "port/products/:id"
-productRouter.get("/:productId", async(req,res,next) => {
+ProductRouter.get("/:productId", async(req,res,next) => {
     try{
         const productId = req.params.productId
         const productFound= await ProductModel.findById(productId)
@@ -38,7 +38,7 @@ productRouter.get("/:productId", async(req,res,next) => {
 
 //Create a new product
 // POST URL = "port/products"
-productRouter.post("/",async (req,res,next)=>{
+ProductRouter.post("/",async (req,res,next)=>{
     try{
         const newProduct = new ProductModel(req.body)
         const { _id } = await newProduct.save()
@@ -56,7 +56,7 @@ productRouter.post("/",async (req,res,next)=>{
 
 //Edit a single specific product
 // PUT URL = port/products/:id
-productRouter.put("/:productId", async(req,res,next)=>{
+ProductRouter.put("/:productId", async(req,res,next)=>{
     try{
         const productId =req.params.productId
         const productEdit = await ProductModel.findByIdAndUpdate(productId)
@@ -69,7 +69,7 @@ productRouter.put("/:productId", async(req,res,next)=>{
 
 //Delete a single specific product
 // DELETE URL = port/products/:id
-productRouter.delete("/:productId", async(req,res,next)=>{
+ProductRouter.delete("/:productId", async(req,res,next)=>{
     try{
         const productId = req.params.productId
 
@@ -87,4 +87,4 @@ productRouter.delete("/:productId", async(req,res,next)=>{
 
 })
 
-export default productRouter
+export default ProductRouter
