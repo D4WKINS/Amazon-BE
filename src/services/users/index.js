@@ -61,15 +61,20 @@ UserRouter.post('/',async (req,res,next)=>{
 })
 /**------------ UPDATE USER PICTURE -------------**/
 
-const uploadOnCloudinary = multer({ storage: cloudinaryStorage}).single("image")
+// UploadOnCloudinary allows us to upload the image to cloudinary using the cloudinaryStorage function from cloudinary.js
+//multer({ storage: cloudinaryStorage}) means that we are going to upload images to cloudinary storage
+//single("image") is the key for multer, it is used to know which file is going to be uploaded, this can be any string/name
+const uploadOnCloudinary = multer({ storage: cloudinaryStorage}).single("picture") //.sinlge("image") means that we are only going to upload one image
 
 UserRouter.post("/:userId/image",uploadOnCloudinary, async (req, res, next) => {
     try {
-        const newImage = {image: req.file.path}
-        const updatedImage = await UserModel.findByIdAndUpdate(req.params.userId, newImage, {
-            new: true,
-            runValidators: true
+        const newImage = {image: req.file.path}//{image: req.file.path} means that we are going to upload the image to the image field of a user document
+                                                                                              //findByIdAndUpdate is a mongoose function that allows us to update a document                                                        
+        const updatedImage = await UserModel.findByIdAndUpdate(req.params.userId, newImage, { //First parameter is the id of the document we want to update, second parameter is the object with the new values             
+            new: true,// returns the document with the new values
+            runValidators: true// run the validators
         })
+        //confirm that the image was updated
         if(updatedImage){
             res.status(200).send(updatedImage)
         }else{
