@@ -1,10 +1,10 @@
 import express from 'express';
 import ReviewModel from "./schema.js"
 
-const reviewsRouter = express.Router();
+const ReviewRouter = express.Router();
 
 //Retrieve a single review
-reviewsRouter.get('/:productId/reviews', (req, res) => {
+ReviewRouter.get('/:productId/reviews', (req, res) => {
     try{
     const productId = req.params.productId;
      const getReview = ReviewModel.findOne({productId: productId}); //find the review with the productId
@@ -19,7 +19,7 @@ reviewsRouter.get('/:productId/reviews', (req, res) => {
 });
 
 // Create a new review
-reviewsRouter.post('/:productId/:userId/reviews', (req, res) => {
+ReviewRouter.post('/:productId/:userId/reviews', (req, res) => {
     try{
     const productId = req.params.productId
     const userId = req.params.userId
@@ -40,11 +40,13 @@ reviewsRouter.post('/:productId/:userId/reviews', (req, res) => {
 });
 
 // Update an existing review
-reviewsRouter.put('/', (req, res) => {
+ReviewRouter.put('/', (req, res) => {
 
 });
 
 // Delete an existing review
-reviewsRouter.delete('/', (req, res) => {
+ReviewRouter.delete('/', (req, res) => {
 
 });
+
+export default ReviewRouter;

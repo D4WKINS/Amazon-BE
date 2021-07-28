@@ -21,7 +21,8 @@ const reviewsSchema = new Schema({
         type: String,
         required: true
     },
-    timestamps:true
-})
+},
+    {timestamps:true}
+    );
 
 export default model("Reviews", reviewsSchema);

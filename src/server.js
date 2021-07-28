@@ -3,6 +3,7 @@ import listEndpoints from 'express-list-endpoints'
 import mongoose from 'mongoose'
 import ProductRouter from './services/products/index.js'
 import UserRouter from './services/users/index.js'
+import ReviewRouter from './services/reviews/index.js'
 import {unauthorized,notFound,badRequest,serverError} from './errorHandlers.js'
 import cors from 'cors'
 
@@ -15,6 +16,7 @@ server.use(cors())//Allows Cross Origin Resource Sharing
 
 //----- ROUTES ---------------------
 server.use('/products',ProductRouter)
+server.use('/reviews',ReviewRouter)
 server.use('/users', UserRouter)
 
 //----- ERROR HANDLERS--------------

@@ -1,17 +1,18 @@
 import express from 'express';
 import multer from 'multer';
 import UserModel from './schema.js'
+import createError from 'http-errors';
 import { cloudinaryStorage } from '../../cloudinary/cloudinary.js';
+
 
 const UserRouter = express.Router();
     
 
 /**------------ GET ALL USERS   -------------**/
 
-UserRouter.get('/',(req,res,next)=>{
+UserRouter.get('/', async(req,res,next)=>{
     try{
-    const getUsers = UserModel.find()
-
+    const getUsers = await UserModel.find()
     if(getUsers){
         res.status(200).send(getUsers)
     }else{
@@ -26,10 +27,10 @@ UserRouter.get('/',(req,res,next)=>{
 
 
 /**------------ GET SINGLE USER  -------------**/
-UserRouter.get('/:userId',(req,res,next)=>{
+UserRouter.get('/:userId',async(req,res,next)=>{
     try{
         const userId = req.params.userId
-        const getUser = UserModel.findById(userId)
+        const getUser = await UserModel.findById(userId)
         if(getUser){
             res.status(200).send(getUser)
         }else{
@@ -41,14 +42,15 @@ UserRouter.get('/:userId',(req,res,next)=>{
 })
 
 /**------------ CREATE NEW USER -------------**/
-UserRouter.post('/',(req,res,next)=>{
+UserRouter.post('/',async (req,res,next)=>{
     try{
-    const newUser = new UserModel(req.body)
-        const createdUser = newUser.save()
-        if(createdUser){
-            res.status(201).send(`User created`)
+        const newUser =  new UserModel(req.body)
+        const {_id} = await newUser.save() // {_id} means we are getting the id of the document that we have just created with the newUser object
+        if(newUser){
+            console.log(`New user created with id: ${_id}`)
+            res.status(201).send({_id})
         }else{
-            next(createError())
+            next(createError(401,`User not created`))
         }
     }catch(err){
         next(createError(500,`Internal server error`))
@@ -59,48 +61,51 @@ UserRouter.post('/',(req,res,next)=>{
 })
 /**------------ UPDATE USER PICTURE -------------**/
 
-const uploadOnCloudinary = multer({ storage: cloudinaryStorage}).single("user")
-UserRouter.post("/:userId/picture",uploadOnCloudinary, async (req, res, next) => {
+const uploadOnCloudinary = multer({ storage: cloudinaryStorage}).single("image")
+
+UserRouter.post("/:userId/image",uploadOnCloudinary, async (req, res, next) => {
     try {
         const newImage = {image: req.file.path}
-        const updatedImage = await ProfileModel.findByIdAndUpdate(req.params.userId, newImage, {
+        const updatedImage = await UserModel.findByIdAndUpdate(req.params.userId, newImage, {
             new: true,
             runValidators: true
         })
         if(updatedImage){
-            res.send(updatedImage)
+            res.status(200).send(updatedImage)
         }else{
-            res.send(404).send(`Profile image with the id of ${req.params.userId} not found!`)
+            res.status(404).send(`Profile image with the id of ${req.params.userId} not found!`)
         }
         
     } catch (error) {
-        next(createError(500, "Error in profileing profile details"))
+        next(createError(500, "Error occurred updating user picture"))
     }
 })
 
 /**------------ EDIT USER -------------**/
-UserRouter.put('/:userId',(req,res,next) =>{
+UserRouter.put('/:userId', async(req,res,next) =>{
 
         try{
-            const userId = req.params.id
-            const userModified = UserModel.findByIdAndUpdate(
-                userId,
-                req.body,
-                {new:true},//{new:true} returns the updated document
-            )
+            const userId = req.params.userId
+            const userModified = await UserModel.findByIdAndUpdate(userId, req.body,{
+                new:true,
+                runValidators: true
+            })
+
             if(userModified){
-                res.status(200)
+                res.status(200).send("User modified successfully")
+            }else{
+                next(createError(401,`User not found`))
             }
-        }catch(err){
+         }catch(err){
             next(createError(500,`Internal server error`)) //next passes the error to the error handler
         }
 })
 
 /**------------ DELETE USER -------------**/
-UserRouter.delete('/:userId',(req,res,next) =>{
+UserRouter.delete('/:userId', async(req,res,next) =>{
             try{
                 const userId = req.params.userId
-                const deletedUser = UserModel.findByIdAndDelete(userId)
+                const deletedUser = await UserModel.findByIdAndDelete(userId)
                     if(deletedUser){
                         res.status(200).send(`User was deleted successfully`)
                     }else{
