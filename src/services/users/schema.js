@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
 
-const UsersSchema = new mongoose.Schema({
+const {Schema, model} = mongoose
+
+const UsersSchema = new Schema({
 
         name:{
             type:String,
@@ -23,9 +25,13 @@ const UsersSchema = new mongoose.Schema({
             required:false,
             default:"https://m.media-amazon.com/images/G/01/author-pages/no-profile-image-placeholder-gb._CB484118601_.png"
         },
+        reviews:{
+            type:Schema.Types.ObjectId,
+            ref:'Reviews'
+        }
     },
     {timestamps:true}
     )
 
 
-export default mongoose.model('User', UsersSchema);
+export default model('User', UsersSchema);

@@ -30,11 +30,25 @@ const productSchema = new Schema({//create a schema
         type:String,
         required:true
     },
-    reviews: {//For every product we want to create a review schema to store the reviews for that product
-    type: Schema.Types.ObjectId, 
-        ref: 'Review', //this is a reference to the review schema to create a review for this product
-        required: false 
-    },
+    reviews:[{
+        user:{
+            type:Schema.Types.ObjectId,
+            ref:'User',
+            required:true
+        },
+        title:{
+            type:String,
+            required:true
+        },
+        text:{
+            type:String,    
+            required:true
+        },
+    }],
+    // reviews: {//For every product we want to create a review schema to store the reviews for that product
+    // type: Schema.Types.ObjectId, 
+    //     ref: 'Reviews' //Using this to link the reviews to the product we can find the reviews for a product by using the product id
+    // },
     tags: {//For every product we want to create a tag schema to store the tags for that product
         type: [String],//[String] means array of strings which means an array that expects string values
         required: false
