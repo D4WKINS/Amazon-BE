@@ -25,10 +25,6 @@ const UsersSchema = new Schema({
             required:false,
             default:"https://m.media-amazon.com/images/G/01/author-pages/no-profile-image-placeholder-gb._CB484118601_.png"
         },
-        reviews:{
-            type:Schema.Types.ObjectId,
-            ref:'Reviews'
-        }
     },
     {timestamps:true}
     )

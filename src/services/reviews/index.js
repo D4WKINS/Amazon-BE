@@ -38,7 +38,7 @@ ReviewRouter.post('/', async (req, res, next) => {
 
 
     const newReview = new ReviewModel(req.body);
-    const { _id } = await newReview.save()
+    const { _id } = await newReview.save() // {_id} is the id of the new review 
     if(newReview){
         res.status(201).send( { _id });
     

@@ -30,20 +30,21 @@ const productSchema = new Schema({//create a schema
         type:String,
         required:true
     },
-    reviews:[{
-        user:{
-            type:Schema.Types.ObjectId,
-            ref:'User',
-            required:true
-        },
-        title:{
-            type:String,
-            required:true
-        },
-        text:{
-            type:String,    
-            required:true
-        },
+    reviews: [{
+        type: new Schema(
+            {
+                user:{
+                    type:Schema.Types.ObjectId,// once the user is saved, the id will be saved as an objectId and used to reference the user
+                    ref:'User'
+                },
+                title:{
+                    type:String
+                },
+                text:{
+                    type:String
+                }
+            },{ timestamps: true })
+       
     }],
     // reviews: {//For every product we want to create a review schema to store the reviews for that product
     // type: Schema.Types.ObjectId, 

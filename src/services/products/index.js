@@ -11,7 +11,8 @@ const ProductRouter = express.Router();
 ProductRouter.get("/", async(req, res, next)=>{
     try{
 
-        const products = await ProductModel.find().populate("reviews.User")
+        const products = await ProductModel.find().populate('reviews.user')
+       
         if(products){
             res.send(products)
         }
@@ -31,6 +32,7 @@ ProductRouter.get("/:productId", async(req, res, next) => {
     try{
         const productId = req.params.productId
         const productFound= await ProductModel.findById(productId)
+        // ProductModel.findOne({ _id: productId }).populate('reviews.user')
 
         if(productFound){
         res.send(productFound)
@@ -97,13 +99,14 @@ ProductRouter.delete("/:productId", async(req, res, next)=>{
 ProductRouter.post("/:productId/reviews", async(req, res,next ) =>{
     try{
         const productId = req.params.productId
-        const newReview = await ProductModel.findByIdAndUpdate(productId,{
+        const newReview = await ProductModel.findByIdAndUpdate(productId,{$push:{
             reviews:{
                 user:req.body.user,
                 title:req.body.title,
                 text:req.body.text
             }
-        },{
+        }
+    },{
             new:true,
             runValidators:true
         })
@@ -118,6 +121,29 @@ ProductRouter.post("/:productId/reviews", async(req, res,next ) =>{
         next(createError(500,`internal Server error`))
     }
 
+})
+
+ProductRouter.delete('/:productId/reviews', async(req, res, next) =>{
+    try{
+        const productId = req.params.productId
+        const reviewId = req.body.reviewId
+        const productReviews = await ProductModel.findByIdAndUpdate(productId,{$pull:{
+            reviews:{
+                _id:req.params.reviewId
+            }
+        }
+    },{
+            new:true,
+            runValidators:true
+        })
+        if(productReviews){
+            res.status(200).send(`Review successfully deleted on productId ${productId}`)
+        }else{
+            next(createError(404, `Product with ID${productId} not found`))
+        }
+    }catch(err){
+        next(createError(500,`internal Server error`))
+    }
 })
 
 export default ProductRouter
