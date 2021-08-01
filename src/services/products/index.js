@@ -11,7 +11,10 @@ const ProductRouter = express.Router();
 ProductRouter.get("/", async(req, res, next)=>{
     try{
 
-        const products = await ProductModel.find().populate('reviews.user')
+        const products = await ProductModel.find({}).populate({
+            path:'reviews.user', // path to the reviews field in the product model
+            model:'User' // model is the User model which is used to populate the reviews  
+        })
        
         if(products){
             res.send(products)

@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const {Schema, model} = mongoose //import Schema and model from mongoose
 
-const productSchema = new Schema({//create a schema
+const ProductSchema = new Schema({//create a schema
     //Built in schema validation
 
     brand:{
@@ -57,5 +57,10 @@ const productSchema = new Schema({//create a schema
 },
     {timestamps:true}// Automatically add createdAt and updatedAt fields
 );
+// productSchema.virtual('user', {
+//     ref: 'User',
+//     foreignField: "name",
+//     localField: '_id'
+// })
 
-export default model('Product',productSchema);
+export default model('Product',ProductSchema);
