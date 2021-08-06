@@ -11,11 +11,13 @@ const ProductRouter = express.Router();
 ProductRouter.get("/", async(req, res, next)=>{
     try{
 
-        const products = await ProductModel.find({}).populate({
-            path:'reviews.user', // path to the reviews field in the product model
-            model:'User' // model is the User model which is used to populate the reviews  
-        })
+// const products = await ProductModel.find({}).populate({
+//             path:'reviews.user', // path to the reviews field in the product model
+//             model:'User' // model is the User model which is used to populate the reviews  
+//         })
        
+        const products = await ProductModel.find().populate('reviews.user')
+
         if(products){
             res.send(products)
         }
@@ -99,6 +101,7 @@ ProductRouter.delete("/:productId", async(req, res, next)=>{
 
 /*---------------PRODUCT REVIEWS----------*/
 
+ProductRouter.get('/', async(req,res,next) =>{})
 ProductRouter.post("/:productId/reviews", async(req, res,next ) =>{
     try{
         const productId = req.params.productId
